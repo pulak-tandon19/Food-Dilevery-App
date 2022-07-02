@@ -92,7 +92,7 @@ const csrftoken = getCookie('csrftoken');
             },
             data: JSON.stringify({'isPaid': true}),
             success: function(data) {
-                window.location.href = '/payment-confirmation/'
+                window.location.href = "{% url 'payment-confirmation' pk %}"
             }
         })
       });

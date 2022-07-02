@@ -83,14 +83,16 @@ class Order(View):
 
         # Sending Mail
 
-        body = ('Your order has been placed. Your food is being prepared and will be delivered soon!\n'
-        f'Your Total: {price}\n'
-        'Thank You again for your order! ')
+        body = ('Your order has been placed. Your food is being prepared and will be delivered soon!\n')
+        # 'Thank You again for your order! ')
+        for item in order.items.all():
+            body+=(f'${item.name}:- ${item.price} \n')
+        body+=(f'Total:- ${order.price}')
 
         send_mail(
             'Thank You For Your Order!',
             body,
-            'example.example.com',
+            'pulaktandon2000@gmail.com',
             [email],
             fail_silently = False
         )
@@ -102,7 +104,7 @@ class Order(View):
 class OrderConfirmation(View):
     def get(self, request, pk, *args, **kwargs):
         order = OrderModel.objects.get(pk=pk)
-
+        
         context={
                 'pk' : order.pk,
                 'items': order.items,
@@ -119,10 +121,24 @@ class OrderConfirmation(View):
             order.is_paid = True
             order.save()
         
-        return redirect('payment-confirmation')
+        return redirect('payment-confirmation', pk)
 
 class OrderPayConfirmation(View):
-    def get(self, request, *args, **kwargs): 
+    def get(self, request, pk, *args, **kwargs): 
+        order = OrderModel.objects.get(pk=pk)
+        body = (f'Your payment is completed.\n Show this email to delivery boy.\n Your order:-\n')
+        # '{for item in order.items.all()} ${item.name} ${item.price}')
+        for item in order.items.all():
+            body+=(f'${item.name}:- ${item.price} \n')
+        body+=(f'Total:- ${order.price}')
+        send_mail(
+            'Payment Confirmed!',
+            body,
+            'fooddelivery1219@gmail.com',
+            [order.email],
+            fail_silently = False
+        )
+
         return render(request, 'customer/order_pay_confirmation.html')
 
 class Menu(View):

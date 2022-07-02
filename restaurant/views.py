@@ -36,6 +36,7 @@ class OrderDetails(LoginRequiredMixin, UserPassesTestMixin, View):
         order = OrderModel.objects.get(pk=pk)
         context = {
             'order' : order,
+            'items': order.items,
         }
         return render(request, 'restaurant/order-details.html', context)
 
@@ -46,6 +47,7 @@ class OrderDetails(LoginRequiredMixin, UserPassesTestMixin, View):
 
         context={
             'order': order,
+            'items': order.items,
         }
 
         return render(request, 'restaurant/order-details.html', context)

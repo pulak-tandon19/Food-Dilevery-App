@@ -43,6 +43,13 @@
                 </form>
                 {% endif %}
             </p>
+            <div class="col-md-6 col-sm-12 mt-5">
+                <h5>Order: </h5>
+                {% for item in order.items.all %}
+                 <p>{{ item }}</p>
+                 {% endfor %}
+
+            </div>
         </div>
     </div>
 </div>
