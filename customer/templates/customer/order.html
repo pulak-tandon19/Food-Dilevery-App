@@ -1,11 +1,29 @@
 {% extends 'customer/base.html' %}
 
 {% block content %}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6 col-sm-12 text-center">
+            <h1>What's On Our Menu?</h1>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8 col-sm-12 text-center">
+            <form method ="GET" action="{% url 'order-search' %}">
+                <div class="md-form mt-0 active-cyan-2">
+                    <input type="text" class="form-control" name="q" placeholder="Search Our Menu" area-label="Search" value="{{ request.GET.q }}">
+                </div>
+            </form>
+        </div>
+    </div>
 <div class="container mb-5">
     <div class="row justify-content-center mt-1">
         <div class="col-md-12 col-sm-12 p-4">
             <form method="POST">
                 {% csrf_token %}
+                {% if appetizers %}
                 <div class="pt-5">
                     {% for app in appetizers %}
                     <div class="row">
@@ -26,7 +44,8 @@
                     <hr />
                     {% endfor %}
                 </div>
-
+                {% endif %}
+                {% if entres %}
                 <div class="pt-5">
                     {% for entre in entres %}
                     <div class="row mt-4">
@@ -48,7 +67,9 @@
                     <hr />
                     {% endfor %}
                 </div>
+                {% endif %}
 
+                {% if desserts %}
                 <div class="pt-5">
                     {% for dessert in desserts %}
                     <div class="row mt-4">
@@ -70,7 +91,9 @@
                     <hr />
                     {% endfor %}
                 </div>
+                {% endif %}
 
+                {% if drinks %}
                 <div class="pt-5">
                     {% for drink in drinks %}
                     <div class="row mt-4">
@@ -92,6 +115,32 @@
                     <hr />
                     {% endfor %}
                 </div>
+                {% endif %}
+
+                {% if menu_items %}
+                <div class="pt-5">
+                    {% for item in menu_items %}
+                    <div class="row mt-4">
+                        <div class="col-md-2 col-sm-12">
+                            <img class="rounded" src="{{ item.image.url }}" width="150" height="100" />
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <div class="d-flex flex-row">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" name="items[]" class="form-check-input"
+                                        value="{{ item.pk }}">
+                                    <label class="form-check-label">{{ item.name }}</label>
+                                </div>
+                                <p class="font-weight-bold pl-5">{{ item.price }}</p>
+                            </div>
+                            <p>{{ item.description }}</p>
+                        </div>
+                    </div>
+                    <hr />
+                    {% endfor %}
+                </div>
+                {% endif %}
+
                 <div class="form-group pt-3">
                     <label for="name">Full Name</label>
                     <input type="text" required class="form-control" placeholder="Your Name" name="name">

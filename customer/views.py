@@ -164,3 +164,86 @@ class MenuSearch(View):
         }
 
         return render(request, 'customer/menu.html', context)
+
+class OrderSearch(View):
+    def get(self, request, *args, **kwargs):
+        query = self.request.GET.get("q")
+        menu_items = MenuItem.objects.filter(
+            Q(name__icontains= query) |
+            Q(price__icontains= query) |
+            Q(description__icontains = query)
+        )
+
+        context={
+            'menu_items' : menu_items
+        }
+
+        return render(request, 'customer/order.html', context)
+
+    def post(self, request, *argts, **kwargs):
+
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        street = request.POST.get('street')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        pin_code = request.POST.get('pin')
+
+
+        order_items = {
+            'items' : []
+        }
+
+        items= request.POST.getlist('items[]')
+
+        for item in items:
+            menu_item = MenuItem.objects.get(pk__contains= int(item))
+            item_data= {
+                'id' : menu_item.pk,
+                'name' : menu_item.name,
+                'price' : menu_item.price,
+            }
+
+            order_items['items'].append(item_data)
+
+            price = 0 
+            item_ids = []
+
+        for item in order_items['items']:
+            price+= item['price']
+            item_ids.append(item['id'])
+
+        order= OrderModel.objects.create(
+            price=price,
+            name= name,
+            email = email,
+            street= street,
+            city = city,
+            state = state,
+            pin_code = pin_code,
+        )
+        order.items.add(*item_ids)
+
+        context= {
+                'items' : order_items['items'],
+                'price' : price
+            }
+
+        # Sending Mail
+
+        body = ('Your order has been placed. Your food is being prepared and will be delivered soon!\n')
+        # 'Thank You again for your order! ')
+        for item in order.items.all():
+            body+=(f'${item.name}:- ${item.price} \n')
+        body+=(f'Total:- ${order.price}')
+
+        send_mail(
+            'Thank You For Your Order!',
+            body,
+            'ustoyou.deliver@gmail.com',
+            [email],
+            fail_silently = False
+        )
+
+        return redirect('order-confirmation', pk=order.pk)
+

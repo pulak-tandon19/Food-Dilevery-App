@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import cloudinary
+import cloudinary_storage
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,6 +52,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'cloudinary',
+    'cloudinary_storage'
 ]
 
 
@@ -57,6 +61,7 @@ SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -133,6 +138,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR/ 'static'
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL ='/media/'
@@ -142,8 +149,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'fooddelivery1219@gmail.com'
-EMAIL_HOST_PASSWORD = 'nztgpawharqwcjiw'
+EMAIL_HOST_USER = 'ustoyou.deliver@gmail.com'
+EMAIL_HOST_PASSWORD = 'aikffwdmjrfvlccw'
 
 ACCOUNT_ADAPTER = 'restaurant.account_adapter.NoNewUsersAccountAdapter'
 
@@ -154,4 +161,12 @@ LOGIN_REDIRECT_URL  = 'dashboard'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dvpyihode',
+    'API_KEY': '155322735253541',
+    'API_SECRET': 'vzGB1ytZe7zsXnaDSHsgMsavIRA'
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
