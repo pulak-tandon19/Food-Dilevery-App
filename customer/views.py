@@ -240,7 +240,7 @@ class OrderSearch(View):
         send_mail(
             'Thank You For Your Order!',
             body,
-            'ustoyou.deliver@gmail.com',
+            'ustoyou.fooddeliver@gmail.com',
             [email],
             fail_silently = False
         )
