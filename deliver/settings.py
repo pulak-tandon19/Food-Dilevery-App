@@ -30,8 +30,8 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast = bool, default = False)
 # DEBUG = True
 
-# ALLOWED_HOSTS = [config('ALLOWED_HOST')]
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [config('ALLOWED_HOST')]
+# ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -143,7 +143,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR/ 'static'
 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL ='/media/'
 
 
